@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#41414C" />
     <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
-    <title>/jobsCalc</title>
+    <title>JobsCalc</title>
 
     <link rel="stylesheet" href="/styles/main.css" />
     <link rel="stylesheet" href="/styles/partials/page-header.css" />
@@ -24,7 +24,6 @@
 
     <script src="scripts/index.js" defer type="module"></script>
   </head>
-
   <body id="page-index">
     <header class="page-header">
       <div class="container">
@@ -33,13 +32,12 @@
           <img id="logo" src="/images/logo.svg" alt="Logo" />
           <span id="notification">
             <img src="/images/alert-octagon.svg" alt="Alerta" />
-            Você tem 2 horas livres no seu dia
+            <% if (freeHours <= 0) {%> Você não tem horas livres <% } else { %>
+            Você tem <%= freeHours %> horas livres no seu dia <% } %>
           </span>
           <a href="/profile" id="avatar-profile">
-            <p>Jakeliny <span>Ver perfil</span></p>
-            <img
-              src="https://avatars.githubusercontent.com/u/17316392?s=460&u=6912a91a70bc89745a2079fdcdad3bc3ce370f13&v=4"
-            />
+            <p><%= profile.name %> <span>Ver perfil</span></p>
+            <img src="<%= profile.avatar %>" />
           </a>
         </section>
 
@@ -50,23 +48,23 @@
 
           <div class="info">
             <div class="total">
-              <strong>12</strong>
+              <strong><%= statusCount.total %> </strong>
               Projetos ao total
             </div>
             <div class="in-progress">
-              <strong>7</strong>
+              <strong><%= statusCount.progress %> </strong>
               Em andamento
             </div>
             <div class="finished">
-              <strong>4</strong>
+              <strong><%= statusCount.done %> </strong>
               Encerrados
             </div>
           </div>
           <a class="button orange" href="/job">
             <span>
-              <img src="/images/plus-24.svg" alt="Novo /job" />
+              <img src="/images/plus-24.svg" alt="Novo Job" />
             </span>
-            Adicionar novo /job
+            Adicionar novo job
           </a>
         </section>
       </div>
@@ -77,16 +75,15 @@
         <h1 class="sr-only">Trabalhos</h1>
 
         <div class="cards">
-          <% jobs.forEach((job ) => { %>
-
-          <div class="card <%= job.status %>" data-id="<%= job.id %> ">
+          <% jobs.forEach((job) => { %>
+          <div class="card <%= job.status %>" data-id="<%= job.id %>">
             <div class="id column"><%= job.id %></div>
             <div class="name column"><%= job.name %></div>
             <div class="deadline column">
               <span>Prazo</span>
               <p>
                 <% if(job.status === 'progress') { %> <%= job.remaining %> dias
-                para a entrega <% } else { %> Prazo Encerrado <% } %>
+                para a entrega <% } else { %> Prazo encerrado <% } %>
               </p>
             </div>
             <div class="amount column">
@@ -94,25 +91,24 @@
               <p>R$ <%= job.budget.toFixed(2).replace('.', ',') %></p>
             </div>
             <div class="status badge column">
-              <%= job.status == 'done' ? 'Encerrado' : 'Em andamendo' %>
+              <%= job.status === 'done' ? 'Encerrado' : 'Em andamento' %>
             </div>
             <div class="actions column flex">
               <p class="sr-only">Ações</p>
               <a
                 href="/job/<%= job.id %> "
                 class="button white edit"
-                title="Editar /job"
+                title="Editar Job"
               >
-                <img src="/images/edit-24.svg" alt="Editar /job" />
+                <img src="/images/edit-24.svg" alt="Editar Job" />
               </a>
-              <button class="delete button white" title="Excluir /job">
-                <img src="/images/trash-24.svg" alt="Excluir /job" />
+              <button class="delete button white" title="Excluir Job">
+                <img src="/images/trash-24.svg" alt="Excluir Job" />
               </button>
             </div>
           </div>
-          <% }) %>
-
           <!-- end card -->
+          <% }) %>
         </div>
         <!-- end cards -->
       </main>
@@ -121,26 +117,20 @@
 
     <div class="modal-wrapper">
       <div class="modal">
-        <img
-          src="/images/trash-48.svg"
-          alt="Excluir /job"
-          title="Excluir /job"
-        />
-        <h3>Excluir /job</h3>
+        <img src="/images/trash-48.svg" alt="Excluir Job" title="Excluir Job" />
+        <h3>Excluir Job</h3>
         <p>
-          Quer mesmo excluir esse /job? <br />
+          Quer mesmo excluir esse job? <br />
           Ele será apagado para sempre.
         </p>
-
-        <p></p>
         <footer>
           <a class="button gray" href="#">Cancelar</a>
-          <button class="button red" type="submit" form="delete-/job">
-            Excluir /job
+          <button class="button red" type="submit" form="delete-job">
+            Excluir Job
           </button>
         </footer>
       </div>
-      <form method="post" action="//job/delete" id="delete-/job"></form>
+      <form method="post" action="/job/delete" id="delete-job"></form>
     </div>
     <!-- end modal-wrapper -->
   </body>
